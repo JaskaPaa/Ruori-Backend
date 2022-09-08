@@ -10,3 +10,5 @@ docker compose up
 
 Ja testaa selaimessa frontin toimivuus osoitteessa: http://localhost:3000/
 
+
+
