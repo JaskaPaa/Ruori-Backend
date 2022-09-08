@@ -11,7 +11,7 @@ $ docker compose up
 Ja testaa selaimessa frontin toimivuus osoitteessa: http://localhost:3000/
 (Sivu on ruma, anteeksi.)
 
-Samassa terminaalissa ctrl-C pysäyttää containerit.
+Samassa terminaalissa Ctrl-C pysäyttää containerit.
 
 
 Koodaus:
