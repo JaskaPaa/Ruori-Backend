@@ -1,6 +1,6 @@
 # Ruori-test
 
-###Käyttö:
+### Käyttö:
 
 Kloonaa repo ja terminaalissa komennot:
 
@@ -14,7 +14,7 @@ Ja testaa selaimessa frontin toimivuus osoitteessa: http://localhost:3000/
 Samassa terminaalissa Ctrl-C pysäyttää containerit.
 
 
-###Koodaus:
+### Koodaus:
 
 Muuttele koodia client tai server kansiossa. Ja kyseisessä kansiossa komenna:
 
