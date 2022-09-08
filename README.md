@@ -8,6 +8,5 @@ cd Ruori-test
 
 docker compose up
 
-Ja kaikki toimii... ??
-
+Ja testaa selaimessa frontin toimivuus osoitteessa: http://localhost:3000/
 
