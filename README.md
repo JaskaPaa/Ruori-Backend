@@ -9,7 +9,7 @@ $ cd Ruori-test
 $ docker compose up
 
 Ja testaa selaimessa frontin toimivuus osoitteessa: http://localhost:3000/
-(Sivu on ruma, anteeksi.)
+(Sivu on sikaruma, anteeksi.)
 
 Samassa terminaalissa Ctrl-C pysäyttää containerit.
 
