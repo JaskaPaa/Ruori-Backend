@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    container_name: "ruori-server"
+    image: "ruori/ruori-server"
+    ports:
+      - "5000:5000"
+  frontend:
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+    container_name: "ruori-client"
+    image: "ruori/ruori-client"
+    ports:
+      - "3000:3000"
+  mongodb:
+    container_name: mongo
+    image: mongo
+    #restart: always
+    #environment:
+    #MONGO_INITDB_ROOT_USERNAME: root
+    #MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      #- "8000:8000"
+      - "27017:27017"
+
+## poista turhat: docker rmi $(docker images -f "dangling=true" -q)
