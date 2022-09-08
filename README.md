@@ -1,9 +1,8 @@
 # Ruori-test
 
 Käyttö:
-Kloonaa repo.
 
-Terminaalissa komennot:
+Kloonaa repo ja terminaalissa komennot:
 
 cd Ruori-test
 
