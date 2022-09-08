@@ -25,7 +25,7 @@ services:
     #MONGO_INITDB_ROOT_USERNAME: root
     #MONGO_INITDB_ROOT_PASSWORD: example
     ports:
-      #- "8000:8000"
+      #- "8000:8000" ei vaan toimi
       - "27017:27017"
 
 ## poista turhat: docker rmi $(docker images -f "dangling=true" -q)
