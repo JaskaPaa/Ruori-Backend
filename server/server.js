@@ -6,35 +6,10 @@ app.use(cors())
 
 app.use(express.json())
 
-const mongoose = require('mongoose');
-const { response } = require('express')
 
-main()
-  .then(res => console.log("!! Mongoose connection !!"))
-  .catch(err => console.log(err));
+const { Note } = require('./models/note')
 
-async function main() {
-  await mongoose.connect('mongodb://mongo:27017/testGoose');
-}
-
-const noteSchema = new mongoose.Schema({
-  header: String,
-  content: String,
-  date: Date,
-  modified: Date,
-  important: Boolean
-})
-
-const personSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  phone: String,
-  notes: [noteSchema]  
-});
-
-const Note = mongoose.model('Note', noteSchema)
-
-const Person = mongoose.model('Person', personSchema)
+const { Person } = require('./models/person')
 
 const person = new Person({
   name: "Aku Ankka",
@@ -48,6 +23,7 @@ const person = new Person({
 })
 
 /*
+
 person.save()
   .then(result => {
     console.log('person saved!')
@@ -73,10 +49,9 @@ app.get('/notes', (req, res) => {
 app.post('/new_note', (request, response) => {
   
   const body = request.body
-
   //console.log(body)  
 
-  let id = '631ef5229af0af48284fb6c3';
+  let id = '63205d9594631cb634a7180a';
   Person.findById(id, (err, person) => {
     if (err){
       console.log(err);
@@ -103,7 +78,7 @@ app.post('/update_note', (request, response) => {
 
   console.log(body.person_id)  
 
-  let id = '631ef5229af0af48284fb6c3';
+  let id = '63205d9594631cb634a7180a';
   Person.findById(id, function (err, person) {
     if (err) {
         console.log(err);
