@@ -7,8 +7,6 @@ const multer = require ('multer');
 
 const app = express()
 
-
-
 // middleware
 app.use (bodyParser.json ());
 app.use (bodyParser.urlencoded ({extended: true}));
@@ -144,7 +142,7 @@ const storageEngine = multer.diskStorage ({
   filename: function (req, file, callback) {
     callback (
       null,
-      file.fieldname + '-' + Date.now () + path.extname (file.originalname)
+      file.fieldname + '-' + file.originalname
     );
   },
 });
@@ -163,15 +161,29 @@ const fileFilter = (req, file, callback) => {
 // initialize multer
 const upload = multer ({
   storage: storageEngine,
-  fileFilter: fileFilter,
+  //fileFilter: fileFilter,
 });
 
 // routing
-app.post ('/upload', upload.single ('uploadedFile'), (req, res) => {
+app.post ('/upload', upload.single('uploadedFile'), (req, res) => {
   console.log("Uploading (server)...")
   res.json(req.file).status(200);
 });
 
+// The folder path for the files
+const folderPath = __dirname+'/public/uploads';
+ 
+// GET request for single file
+app.get('/single', function(req,res) {
+    console.log('single file');
+     
+    // Download function provided by express
+    res.download(folderPath+'/uploadedFile-test.txt', function(err) {
+        if(err) {
+            console.log(err);
+        }
+    })
+})
 
 const PORT = 5000;
 const HOST = '0.0.0.0';

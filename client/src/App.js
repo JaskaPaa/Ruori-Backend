@@ -55,7 +55,15 @@ const Upload = () => {
     let formData = new FormData (form);
 
     // do something
-    console.log("Form submitted")
+    console.log("Form submitted");
+    axios.post ('http://localhost:5000/upload', formData)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
   }
 
   function handleFileTitle (e) {
@@ -73,6 +81,7 @@ const Upload = () => {
         encType="multipart/form-data"
         onSubmit={handleFormSubmittion}
         id="form"
+        name="foo"
       >
         <input
           type="file"
@@ -97,18 +106,40 @@ const Upload = () => {
         <br />
 
         <button type="submit">Submit Form</button>
-      </form>
+      </form>      
     </React.Fragment>
   );
 }
 
 
+
 const App = () => {
+
+  function handleSubmit(event) {
+    alert('A name was submitted: ');
+    event.preventDefault(); 
+    
+
+    // do something
+    console.log("Form submitted");
+    axios.get ('http://localhost:5000/single')
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   return (
     <div>
       <h1>Ruori</h1>
       <Notes />
       <Upload />
+      <br />
+      <form onSubmit={handleSubmit} >
+        <button type="submit">Download Single File</button>
+      </form>
     </div>
   )
 }
