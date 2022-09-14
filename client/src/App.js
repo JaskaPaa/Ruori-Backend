@@ -1,4 +1,5 @@
-import { useState } from 'react'
+
+import React, {useState} from 'react';
 
 import axios from 'axios'
 
@@ -37,23 +38,77 @@ const Notes = () => {
           Hae
         </button>
       </div>
-      <p>Jotain lisää...</p>
-      <p>Jotain lisää...</p>
-      <p>Jotain muuta...</p>
-      <p>Jotain toista...</p>
-      <p>Blaa blaaa</p>
+      <p>Turha</p>
       <p>{notes}</p>
     </div>
   )
 }
+
+const Upload = () => {
+  const [uploadedFile, setUploadedFile] = useState ('');
+  const [fileTitle, setFileTitle] = useState ('');
+
+  function handleFormSubmittion (e) {
+    e.preventDefault ();
+
+    let form = document.getElementById ('form');
+    let formData = new FormData (form);
+
+    // do something
+    console.log("Form submitted")
+  }
+
+  function handleFileTitle (e) {
+    setFileTitle (e.target.value);
+  }
+
+  function handleUploadedFile (e) {
+    setUploadedFile (e.target.value);
+  }
+
+  return (
+    <React.Fragment>
+      <h1>File upload</h1>
+      <form
+        encType="multipart/form-data"
+        onSubmit={handleFormSubmittion}
+        id="form"
+      >
+        <input
+          type="file"
+          name="uploadedFile"
+          value={uploadedFile}
+          onChange={handleUploadedFile}
+          required
+        />
+        <br />
+        <br />
+
+        <label>File title:</label><br />
+        <input
+          type="text"
+          placeholder="Enter file title"
+          name="fileTitle"
+          value={fileTitle}
+          onChange={handleFileTitle}
+          required
+        />
+        <br />
+        <br />
+
+        <button type="submit">Submit Form</button>
+      </form>
+    </React.Fragment>
+  );
+}
+
 
 const App = () => {
   return (
     <div>
       <h1>Ruori</h1>
       <Notes />
-      <Notes />
-      <Notes />
+      <Upload />
     </div>
   )
 }
