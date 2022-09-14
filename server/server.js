@@ -1,7 +1,18 @@
 const express = require('express')
+const bodyParser = require ('body-parser')
+const cors = require('cors')
+const path = require ('path');
+const multer = require ('multer');
+
+
 const app = express()
 
-const cors = require('cors')
+
+
+// middleware
+app.use (bodyParser.json ());
+app.use (bodyParser.urlencoded ({extended: true}));
+
 app.use(cors())
 
 app.use(express.json())
@@ -127,6 +138,40 @@ app.delete('/delete_note', (request, response) => {
     }
   });  
 })
+
+const storageEngine = multer.diskStorage ({
+  destination: './public/uploads/',
+  filename: function (req, file, callback) {
+    callback (
+      null,
+      file.fieldname + '-' + Date.now () + path.extname (file.originalname)
+    );
+  },
+});
+
+// file filter for multer
+const fileFilter = (req, file, callback) => {
+  let pattern = /jpg|png|svg|PNG|txt/; // reqex
+
+  if (pattern.test (path.extname (file.originalname))) {
+    callback (null, true);
+  } else {
+    callback ('Error: not a valid file');
+  }
+};
+
+// initialize multer
+const upload = multer ({
+  storage: storageEngine,
+  fileFilter: fileFilter,
+});
+
+// routing
+app.post ('/upload', upload.single ('uploadedFile'), (req, res) => {
+  console.log("Uploading (server)...")
+  res.json(req.file).status(200);
+});
+
 
 const PORT = 5000;
 const HOST = '0.0.0.0';
