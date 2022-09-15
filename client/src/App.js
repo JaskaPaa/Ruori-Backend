@@ -8,13 +8,17 @@ const Notes = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('Testi testi')
 
-  fetch("http://localhost:5000")
+  const base = 'http://localhost:5000/api'
+
+  /*
+  fetch(base)
     .then(res => res.text())
     .then(res => console.log(res))
     .catch(err => err);
+  */
   
   axios
-    .get('http://localhost:5000/notes')
+    .get(base + '/notes')
     .then(response => {
       const notes = response.data
       console.log(notes)
@@ -23,7 +27,7 @@ const Notes = () => {
   const getAll = () => {
     console.log("Haetaa dataa...")
     axios
-      .get('http://localhost:5000/notes')
+      .get(base + '/notes')
       .then(response => {
         const notes = response.data
         console.log(notes)
