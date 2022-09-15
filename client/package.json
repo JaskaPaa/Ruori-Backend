@@ -18,7 +18,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "docker:build": "docker build . -t ruori/ruori-client",
-    "docker:run": "docker run -p 3000:3000 -d --name r-client ruori/ruori-client"
+    "docker:run": "docker run -p 3000:3000 -d --name r-client ruori/ruori-client",
+    "bash": "docker exec -it ruori-client bash" 
   },
   "eslintConfig": {
     "extends": [
