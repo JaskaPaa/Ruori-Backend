@@ -115,19 +115,36 @@ const Upload = () => {
 
 const App = () => {
 
-  function handleSubmit(event) {
-    alert('A name was submitted: ');
-    event.preventDefault(); 
-    
+  const [downloadFile, setDownloadFile] = useState ('');
 
+  function handleDownloadFile (e) {
+
+    setDownloadFile(e.target.value.replace('.', '_'));
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    
     // do something
     console.log("Form submitted");
-    axios.get ('http://localhost:5000/single')
-      .then(function (response) {
-        console.log(response);
+    
+    axios({
+      url: 'http://localhost:5000/single/'+ downloadFile,
+      method:'GET',
+      responseType: 'blob'
       })
-      .catch(function (error) {
-        console.log(error);
+      .then((response) => {
+        const url = window.URL
+          .createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', downloadFile.replace('_', '.'));
+        document.body.appendChild(link);
+        link.click();
+        console.log('Downloaded file: ' + downloadFile.replace('_', '.'));
+      })
+      .catch((error) => {
+        console.log(error.toJSON());
       });
   }
 
@@ -138,6 +155,7 @@ const App = () => {
       <Upload />
       <br />
       <form onSubmit={handleSubmit} >
+        <input type="text" id="filename" name="filename" value={downloadFile} onChange={handleDownloadFile} /><br />
         <button type="submit">Download Single File</button>
       </form>
     </div>

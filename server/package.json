@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "docker:build": "docker build . -t ruori/ruori-server",
-    "docker:run": "docker run -p 5000:5000 -d --name r-server ruori/ruori-server"
+    "docker:run": "docker run -p 5000:5000 -d --name r-server ruori/ruori-server",
+    "bash": "docker exec -it ruori-server bash"
   },
   "author": "Jaska",
   "license": "ISC",

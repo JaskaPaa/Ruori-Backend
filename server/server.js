@@ -3,7 +3,7 @@ const bodyParser = require ('body-parser')
 const cors = require('cors')
 const path = require ('path');
 const multer = require ('multer');
-
+const fs = require('fs')
 
 const app = express()
 
@@ -32,7 +32,6 @@ const person = new Person({
 })
 
 /*
-
 person.save()
   .then(result => {
     console.log('person saved!')
@@ -171,16 +170,19 @@ app.post ('/upload', upload.single('uploadedFile'), (req, res) => {
 });
 
 // The folder path for the files
-const folderPath = __dirname+'/public/uploads';
+const folderPath = __dirname + '/public/uploads';
  
 // GET request for single file
-app.get('/single', function(req,res) {
-    console.log('single file');
-     
+app.get('/single/:filename', (req, res, next) => {
+    console.log('single file: ' + req.params.filename);
+    let filename = req.params.filename.replace('_', '.');
+
     // Download function provided by express
-    res.download(folderPath+'/uploadedFile-test.txt', function(err) {
+    //res.set({'filename': filename})
+    res.download(folderPath+'/uploadedFile-' + filename, function(err) {
         if(err) {
             console.log(err);
+            next(err)
         }
     })
 })
