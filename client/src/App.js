@@ -1,5 +1,5 @@
 
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 import axios from 'axios'
 
@@ -48,72 +48,6 @@ const Notes = () => {
   )
 }
 
-const Upload = () => {
-  const [uploadedFile, setUploadedFile] = useState ('');
-  const [fileTitle, setFileTitle] = useState ('');
-
-  function handleFormSubmittion (e) {
-    e.preventDefault ();
-
-    let form = document.getElementById ('form');
-    let formData = new FormData (form);
-
-    // do something
-    console.log("Form submitted");
-    axios.post ('http://localhost:5000/upload', formData)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-  }
-
-  function handleFileTitle (e) {
-    setFileTitle (e.target.value);
-  }
-
-  function handleUploadedFile (e) {
-    setUploadedFile (e.target.value);
-  }
-
-  return (
-    <React.Fragment>
-      <h1>File upload</h1>
-      <form
-        encType="multipart/form-data"
-        onSubmit={handleFormSubmittion}
-        id="form"
-        name="foo"
-      >
-        <input
-          type="file"
-          name="uploadedFile"
-          value={uploadedFile}
-          onChange={handleUploadedFile}
-          required
-        />
-        <br />
-        <br />
-
-        <label>File title:</label><br />
-        <input
-          type="text"
-          placeholder="Enter file title"
-          name="fileTitle"
-          value={fileTitle}
-          onChange={handleFileTitle}
-          required
-        />
-        <br />
-        <br />
-
-        <button type="submit">Submit Form</button>
-      </form>      
-    </React.Fragment>
-  );
-}
 
 
 
@@ -131,9 +65,10 @@ const App = () => {
     
     // do something
     console.log("Form submitted");
+    console.log("App  downloadFile: " + downloadFile);
     
     axios({
-      url: 'http://localhost:5000/single/'+ downloadFile,
+      url: 'http://localhost:5000/single/' + downloadFile,
       method:'GET',
       responseType: 'blob'
       })
@@ -152,16 +87,100 @@ const App = () => {
       });
   }
 
+  const DownloadFile = (props) => {
+
+    //const downloadFile = props.filename
+    const { filename } = props
+
+    const [downloadFile, setDownloadFile] = useState ('');
+
+    function handleDownloadFile (e) {
+      setDownloadFile(e.target.value.replace('.', '_'));
+    }
+
+    console.log("----: " + filename)
+    console.log("----: " + downloadFile)
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      
+      // do something
+      console.log("Form submitted");
+      console.log(filename)
+      console.log(downloadFile);
+      console.log("Download's downloadFile: " + downloadFile);
+
+
+      //let downloadFile2 = filename.replace('.', '_')
+      let downloadFile2 = filename
+      downloadFile2 = downloadFile2.replace('.', '_')
+
+      console.log("Download's downloadFile2: " + downloadFile2 + '---');
+      console.log(typeof downloadFile2);
+
+      console.log(downloadFile2.valueOf() === 'test_txt');
+      
+      downloadFile2 = 'test_txt'
+      console.log(typeof downloadFile2);
+
+      console.log("Download's downloadFile2: " + downloadFile2  + '---');
+
+      console.log(downloadFile2 === 'test_txt');
+
+            
+      axios({
+        url: 'http://localhost:5000/single/' + downloadFile2,
+        method:'GET',
+        responseType: 'blob'
+        })
+        .then((response) => {
+          const url = window.URL
+            .createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          console.log("hahahahaha" + filename)
+          link.setAttribute('download', filename);
+          document.body.appendChild(link);
+          link.click();
+          //console.log('Downloaded file: ' + downloadFile.replace('_', '.'));
+        })
+        .catch((error) => {
+          console.log(error.toJSON());
+        });
+    }
+
+    return (
+      <div>
+      <form onSubmit={handleSubmit} >
+        <input type="text" id="filename" name="filename" value={downloadFile} onChange={handleDownloadFile}/>
+        <button type="submit">Download Single File</button>
+      </form>
+      <button onClick={handleSubmit}>Test Button</button>
+      </div>
+    )
+
+  }
+
   return (
     <div>
       <h1>Ruori</h1>
       <Notes />
-      <Upload />
+      <br />
+      <form // ref='uploadForm' 
+        id='uploadForm' 
+        action='http://localhost:5000/upload' 
+        method='post' 
+        encType="multipart/form-data">
+          <input type="file" name="sampleFile" />
+          <input type='submit' value='Upload!' />
+      </form>
+      <br />
       <br />
       <form onSubmit={handleSubmit} >
-        <input type="text" id="filename" name="filename" value={downloadFile} onChange={handleDownloadFile} /><br />
+        <input type="text" id="filename" name="filename" value={downloadFile} onChange={handleDownloadFile} />
         <button type="submit">Download Single File</button>
       </form>
+      <DownloadFile filename={'text_txt'} />
     </div>
   )
 }

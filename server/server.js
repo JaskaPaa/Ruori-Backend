@@ -4,6 +4,7 @@ const cors = require('cors')
 const path = require ('path');
 const multer = require ('multer');
 const fs = require('fs')
+const fileUpload = require('express-fileupload')
 
 const app = express()
 
@@ -19,47 +20,40 @@ const mongo = require('./mongo')
 
 app.use('/api', mongo)
 
+// default options
+app.use(fileUpload());
+
+app.post('/upload', function(req, res) {
+  let sampleFile;
+  let uploadPath;
+
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+
+  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+  sampleFile = req.files.sampleFile;
+  uploadPath = __dirname + '/uploads/' + sampleFile.name;
+
+  console.log(uploadPath)
+
+  // Use the mv() method to place the file somewhere on your server
+  sampleFile.mv(uploadPath, function(err) {
+    if (err)
+      return res.status(500).send(err);
+
+    res.send('File uploaded!');
+  });
+});
+
 
 app.get('/', (req, res) => {
     res.send('Ruori-palvelin...')
 })
 
 
-const storageEngine = multer.diskStorage ({
-  destination: './public/uploads/',
-  filename: function (req, file, callback) {
-    callback (
-      null,
-      file.fieldname + '-' + file.originalname
-    );
-  },
-});
-
-// file filter for multer
-const fileFilter = (req, file, callback) => {
-  let pattern = /jpg|png|svg|PNG|txt/; // reqex
-
-  if (pattern.test (path.extname (file.originalname))) {
-    callback (null, true);
-  } else {
-    callback ('Error: not a valid file');
-  }
-};
-
-// initialize multer
-const upload = multer ({
-  storage: storageEngine,
-  //fileFilter: fileFilter,
-});
-
-// routing
-app.post ('/upload', upload.single('uploadedFile'), (req, res) => {
-  console.log("Uploading (server)...")
-  res.json(req.file).status(200);
-});
-
 // The folder path for the files
-const folderPath = __dirname + '/public/uploads';
+const folderPath = __dirname + '/uploads/';
  
 // GET request for single file
 app.get('/single/:filename', (req, res, next) => {
@@ -69,7 +63,7 @@ app.get('/single/:filename', (req, res, next) => {
     //res.set({'filename': filename})
 
     // Download function provided by express    
-    res.download(folderPath+'/uploadedFile-' + filename, function(err) {
+    res.download(folderPath + filename, function(err) {
         if(err) {
             console.log(err);
             next(err)
