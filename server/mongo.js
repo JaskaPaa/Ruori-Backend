@@ -7,7 +7,7 @@ router.use((req, res, next) => {
   next()
 })
 
-const { Note } = require('./models/note')
+const { Note, File } = require('./models/note')
 
 const { Person } = require('./models/person')
 
@@ -22,13 +22,14 @@ const person = new Person({
   }]
 })
 
-/*
-person.save()
+
+/*person.save()
   .then(result => {
     console.log('person saved!')
   })
   .catch(err => console.log('pieleen meni'))
 */
+
 
 router.get('/notes', (req, res) => {
     console.log('Getting the notes...')
@@ -59,8 +60,8 @@ router.post('/new_note', (request, response) => {
             date: new Date(),
             important: true
         }));
-        person.save().then(savedNote => {
-            response.json(savedNote)
+        person.save().then(savedPer => {
+            response.json(savedPer)
         });
         }
     });
@@ -96,7 +97,7 @@ router.post('/update_note', (request, response) => {
   
   })
   
-  router.delete('/delete_note', (request, response) => {
+router.delete('/delete_note', (request, response) => {
     const body = request.body;
   
     console.log(body);
@@ -122,6 +123,36 @@ router.post('/update_note', (request, response) => {
       }
     });  
   })
-  
 
-module.exports = router
+function toMongo(file) {
+
+    console.log('blaaaaa');
+
+    const id = "6328710d0115f011d80159c2"
+    const note_id = "6328710d0115f011d80159c3"
+
+    Person.findById(id, function (err, person) {
+        if (err){
+            console.log(err);
+        }
+        else {
+            //console.log("Notes : ", person.notes);
+            const note = person.notes.id(note_id);
+            //console.log("Note: " + note);
+            if (note) {          
+              note.files.push({filename: file})
+              person.save().then(savedNote => {
+                console.log('Saved filename!')
+              });
+            } else {
+                console.log('Note not found')
+            }       
+        }
+      }); 
+}
+
+module.exports = {
+    routes: router,
+    test: toMongo
+}
+

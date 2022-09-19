@@ -16,9 +16,10 @@ app.use(cors())
 
 app.use(express.json())
 
-const mongo = require('./mongo')
+const { routes, test } = require('./mongo')
 
-app.use('/api', mongo)
+
+app.use('/api', routes)
 
 // default options
 app.use(fileUpload());
@@ -26,6 +27,8 @@ app.use(fileUpload());
 app.post('/upload', function(req, res) {
   let sampleFile;
   let uploadPath;
+
+  //console.log(req);
 
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
@@ -35,16 +38,21 @@ app.post('/upload', function(req, res) {
   sampleFile = req.files.sampleFile;
   uploadPath = __dirname + '/uploads/' + sampleFile.name;
 
-  console.log(uploadPath)
+  //console.log(uploadPath)
 
   // Use the mv() method to place the file somewhere on your server
   sampleFile.mv(uploadPath, function(err) {
     if (err)
       return res.status(500).send(err);
+    
+    test(sampleFile.name)
 
+    //console.log(test("baaarara"))
+        
     res.send('!!File uploaded!!');
   });
-});
+})
+
 
 
 app.get('/', (req, res) => {

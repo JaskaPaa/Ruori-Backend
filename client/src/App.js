@@ -31,7 +31,7 @@ const Notes = () => {
       .then(response => {
         const notes = response.data
         console.log(notes)
-        setNotes(JSON.stringify(notes))
+        setNotes(JSON.stringify(notes, null, 4))
       })
   }
 
@@ -43,7 +43,7 @@ const Notes = () => {
         </button>
       </div>
       <p>Turha</p>
-      <p>{notes}</p>
+      <pre>{notes}</pre>
     </div>
   )
 }
@@ -58,17 +58,38 @@ const App = () => {
       <h1>Ruori</h1>
       <Notes />
       <br />
-      <UploadFile />
-      <br />
-      <br />
-      <DownloadFile filename={'test.txt'} />
+      <Files />
     </div>
   )
 }
 
+const Files = () => {
+    
+  return (
+    <div>
+      <UploadFile />
+      <DownloadFile filename={'test.txt'} />
+    </div>
+  )  
+}
+
 const UploadFile = () => {
 
+  function uploadFile(e) {
+    const data = new FormData() ;
+    data.append('sampleFile', e.target.files[0]);
+    axios.post("http://localhost:5000/upload", data)
+        .then(res => { // then print response status
+          console.log(res.statusText)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+  }
+
   return (
+    <span>
+    {/*
     <form // ref='uploadForm' 
         id='uploadForm' 
         action='http://localhost:5000/upload' 
@@ -77,6 +98,9 @@ const UploadFile = () => {
           <input type="file" name="sampleFile" />
           <input type='submit' value='Upload!' />
     </form>
+    */}
+    <input type="file" onChange={uploadFile} />
+    </span>
   ) 
 }
 
@@ -111,9 +135,7 @@ const DownloadFile = (props) => {
   }
 
   return (
-    <div>
     <button onClick={handleSubmit}>Lataa: {filename}</button>
-    </div>
   )
 
 }
