@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 
 import axios from 'axios'
 
+import './App.css'
+
+
+
 const Notes = () => {
 
   const [notes, setNotes] = useState([])
@@ -29,9 +33,10 @@ const Notes = () => {
     axios
       .get(base + '/notes')
       .then(response => {
-        const notes = response.data
-        console.log(notes)
-        setNotes(JSON.stringify(notes, null, 4))
+        const person = response.data
+        //console.log(notes)
+        console.log(person[0].notes[0].files[0])
+        setNotes(JSON.stringify(person, null, 4))
       })
   }
 
@@ -48,20 +53,18 @@ const Notes = () => {
   )
 }
 
-
-
-
 const App = () => {  
 
   return (
     <div>
-      <h1>Ruori</h1>
+      <h1>Ruori testaus</h1>
       <Notes />
       <br />
       <Files />
     </div>
   )
 }
+
 
 const Files = () => {
     
@@ -99,7 +102,7 @@ const UploadFile = () => {
           <input type='submit' value='Upload!' />
     </form>
     */}
-    <input type="file" onChange={uploadFile} />
+    <input className="custom-file-input" type="file" onChange={uploadFile} />
     </span>
   ) 
 }
