@@ -4,7 +4,7 @@
 
 Kloonaa repo ja terminaalissa komennot:
 
-$ cd Ruori-test
+$ cd Ruori-Docker
 
 $ docker compose up
 
